@@ -16,6 +16,7 @@ public abstract class SaveData
     }
 }
 
+/*
 [Serializable]
 public class TableExportedData : SaveData
 {
@@ -37,4 +38,4 @@ public class TableExportedData : SaveData
         }
     }
 
-}
+}*/

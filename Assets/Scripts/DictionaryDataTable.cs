@@ -8,21 +8,24 @@ using UnityEngine;
 //TODO:override????
 //TODO:card resource deck
 //TODO:check name??????
-public class DictionaryDataTable
+[Serializable]
+public class DictionaryDataTable:SaveData
 {
-    private string[][] rawData = null;
-    private string[] dictionary;
+    public override bool useAesEncryption => false;
+
+    public string[] dictionary;
+    [SerializeField] public List<DataRow> rawData = null;
     public int rowCount = 0;
     public int columnCount = 0;
 
     //初始化用
     public bool InitializeTable(int row, int col)
     {
-        rawData = new string[row][];
+        rawData = new List<DataRow>();
         dictionary = new string[col];
         for (int i=0; i<row; i++)
         {
-            rawData[i] = new string[col];
+            rawData.Add(new DataRow(col));
         }
         rowCount = row;
         columnCount = col;
@@ -36,7 +39,7 @@ public class DictionaryDataTable
             Debug.Log("null out");
             return false;
         }
-        rawData[row][col] = content;
+        rawData[row].data[col] = content;
         //Debug.Log(rawData[row][col]);
         return true;
     }
@@ -46,7 +49,7 @@ public class DictionaryDataTable
         //Debug.Log(typeof(T));
         if (typeof(T) == typeof(int))
         {
-            if (int.TryParse(rawData[row][col], out int intResult))
+            if (int.TryParse(rawData[row].data[col], out int intResult))
                 return TypeConvertor<T>(intResult);
             else
             {
@@ -56,7 +59,7 @@ public class DictionaryDataTable
         }
         if (typeof(T) == typeof(float))
         {
-            if (float.TryParse(rawData[row][col], out float floatResult))
+            if (float.TryParse(rawData[row].data[col], out float floatResult))
                 return TypeConvertor<T>(floatResult);
             else
             {
@@ -66,7 +69,7 @@ public class DictionaryDataTable
         }
         if (typeof(T) == typeof(string))
         {
-            return TypeConvertor<T>(rawData[row][col]);
+            return TypeConvertor<T>(rawData[row].data[col]);
         }
         Debug.Log("wrong data type");
         return default(T);
@@ -92,7 +95,7 @@ public class DictionaryDataTable
         List<string> list = new List<string>();
         for(int i = 0; i < columnCount; i++)
         {
-            list.Add(rawData[row][i]);
+            list.Add(rawData[row].data[i]);
             //Debug.Log(list[i]);
         }
         return list;
@@ -120,7 +123,7 @@ public class DictionaryDataTable
         {
             for(int i = 0; i < rowCount; i++)
             {
-                if (int.Parse(rawData[i][uidCol]) == uid)
+                if (int.Parse(rawData[i].data[uidCol]) == uid)
                 {
                     return i;
                 }
@@ -140,7 +143,7 @@ public class DictionaryDataTable
         }
         else
         {
-            return TypeConvertor<T>(rawData[row][col]);
+            return TypeConvertor<T>(rawData[row].data[col]);
         }
     }
     //初始化用
@@ -168,6 +171,22 @@ public class DictionaryDataTable
     {
         //Debug.Log(dictionary[column]);
         return dictionary[column];
+    }
+
+}
+
+[Serializable]
+public class DataRow
+{
+    public string[] data;
+
+    public DataRow() { 
+        data = new string[0];
+    }
+
+    public DataRow(int col)
+    {
+        data = new string[col];
     }
 
 }

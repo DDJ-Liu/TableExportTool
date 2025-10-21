@@ -25,6 +25,7 @@ public class TableExporter
         if (Path.GetExtension(sourceFilePath) == ".xlsx" || Path.GetExtension(sourceFilePath) == ".xls")
         {
             DictionaryDataTable rawDataTable = TableReader.ReadFromStreamingAssets(sourceFilePath);
+            /*
             Dictionary<string, string>[] tableDict = new Dictionary<string, string>[rawDataTable.rowCount];
             for (int i = 0; i < rawDataTable.rowCount; i++) {
                 tableDict[i] = new Dictionary<string, string>();
@@ -34,12 +35,14 @@ public class TableExporter
                 }
             }
             TableExportedData exportedData = new TableExportedData(tableDict);
+            */
+
 
             string absoluteName = Path.GetFileNameWithoutExtension(sourceFilePath);
             //Debug.Log(absoluteName);
             string targetPath = Path.Combine(targetFolder, absoluteName + ".dat");
             //Debug.Log(targetPath);
-            DataSaveManager.Save(exportedData, targetPath);
+            DataSaveManager.Save(rawDataTable, targetPath);
         }
     }
 
