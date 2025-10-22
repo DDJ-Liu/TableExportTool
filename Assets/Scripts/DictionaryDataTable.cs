@@ -11,7 +11,7 @@ using UnityEngine;
 [Serializable]
 public class DictionaryDataTable:SaveData
 {
-    public override bool useAesEncryption => false;
+    public override bool useAesEncryption => true;
 
     public string[] dictionary;
     [SerializeField] public List<DataRow> rawData = null;
